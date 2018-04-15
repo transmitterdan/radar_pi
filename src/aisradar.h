@@ -105,7 +105,7 @@ public:
     void SetColourScheme(PI_ColorScheme cs);
     void OnLeftMouse( const wxPoint &curpos );
     void paintEvent( wxPaintEvent& event );
-
+    void OnKeyDown(wxKeyEvent &event);
 private:
     void OnClose(wxCloseEvent& event);
     void OnRange( wxCommandEvent& event );
@@ -118,6 +118,8 @@ private:
     void renderRange( wxDC& dc, wxPoint &center, wxSize &size, int radius );
     void renderBoats(wxDC& dc, wxPoint &center, wxSize &size, int radius, ArrayOfPlugIn_AIS_Targets *AisTargets );
     void TrimAisField(wxString *fld);
+    void connectKeyDownEvent(wxWindow* pclComponent);
+
     
     //    Data
     wxWindow               *pParent;

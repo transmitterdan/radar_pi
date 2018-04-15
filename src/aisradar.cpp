@@ -164,7 +164,7 @@ bool RadarFrame::Create ( wxWindow *parent, aisradar_pi *ppi, wxWindowID id,
     m_Timer->Start(2000);
 
     vbox->MyFit(this);
-
+    this->connectKeyDownEvent(this);
     return true;
 }
 
@@ -405,4 +405,30 @@ void RadarFrame::renderRange(wxDC& dc, wxPoint &center, wxSize &size, int radius
         dc.SetTextForeground(wxColour(128,128,128));
         dc.DrawText(wxString::Format(_T("%3.1d\u00B0"),(int)(m_Ebl+offset)%360),tx,ty);
     }
+}
+
+void
+RadarFrame::connectKeyDownEvent(wxWindow* pclComponent)
+{
+    if (pclComponent)
+    {
+        pclComponent->Connect(wxID_ANY,
+            wxEVT_KEY_DOWN,
+            wxKeyEventHandler(RadarFrame::OnKeyDown),
+            (wxObject*)NULL,
+            this);
+
+        wxWindowListNode* pclNode = pclComponent->GetChildren().GetFirst();
+        while (pclNode)
+        {
+            wxWindow* pclChild = pclNode->GetData();
+            this->connectKeyDownEvent(pclChild);
+
+            pclNode = pclNode->GetNext();
+        }
+    }
+}
+
+void RadarFrame::OnKeyDown(wxKeyEvent &event) {
+    GetOCPNCanvasWindow()->ProcessWindowEvent(event);
 }
